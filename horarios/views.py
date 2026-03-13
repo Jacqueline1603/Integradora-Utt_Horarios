@@ -20,10 +20,10 @@ def login_view(request):
                 return redirect("admin_dashboard")
 
             elif user.role == "profesor":
-                return redirect("profesor_dashboard")
+                return redirect("horario_profesor")
 
             elif user.role == "alumno":
-                return redirect("alumno_dashboard")
+                return redirect("horario_alumno")
 
         else:
             return render(request, "horarios/login.html", {
@@ -63,9 +63,11 @@ def calendario(request):
     return render(request, "horarios/calendario.html")
 
 
-def horario_semanal(request):
+def horario_alumno(request):
 
-    horarios = Horario.objects.all()
+    alumno = Alumno.objects.get(usuario=request.user)
+
+    horarios = Horario.objects.filter(grupo=alumno.grupo)
 
     dias = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes"]
 
@@ -82,12 +84,37 @@ def horario_semanal(request):
         hora = h.hora_inicio.strftime("%H:%M")
         tabla[hora][h.dia] = h
 
-    contexto = {
+    return render(request, "horarios/horario_semanal.html", {
         "tabla": tabla,
         "dias": dias
-    }
+    })
 
-    return render(request, "horarios/horario_semanal.html", contexto)
+
+def horario_profesor(request):
+
+    profesor = Profesor.objects.get(usuario=request.user)
+
+    horarios = Horario.objects.filter(profesor=profesor)
+
+    dias = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes"]
+
+    horas = sorted(set([h.hora_inicio.strftime("%H:%M") for h in horarios]))
+
+    tabla = {}
+
+    for hora in horas:
+        tabla[hora] = {}
+        for dia in dias:
+            tabla[hora][dia] = None
+
+    for h in horarios:
+        hora = h.hora_inicio.strftime("%H:%M")
+        tabla[hora][h.dia] = h
+
+    return render(request, "horarios/horario_semanal.html", {
+        "tabla": tabla,
+        "dias": dias
+    })
 
 def editar_aula(request, horario_id):
 

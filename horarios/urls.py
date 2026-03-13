@@ -11,9 +11,11 @@ urlpatterns = [
     path('alumno-dashboard/', views.alumno_dashboard, name='alumno_dashboard'),
 
     path('horarios/', views.lista_horarios, name='lista_horarios'),
-    path('horario-semanal/', views.horario_semanal, name='horario_semanal'),
     path('calendario/', views.calendario, name='calendario'),
 
     path('editar-aula/<int:id>/', views.editar_aula, name='editar_aula'),
+
+    path('horario-alumno/', views.horario_alumno, name='horario_alumno'),
+    path('horario-profesor/', views.horario_profesor, name='horario_profesor'),
 
 ]
