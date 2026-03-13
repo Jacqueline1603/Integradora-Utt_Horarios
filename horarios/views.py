@@ -37,9 +37,19 @@ def logout_view(request):
     logout(request)
     return redirect("login")
 
-
 def admin_dashboard(request):
-    return render(request, "horarios/admin_dashboard.html")
+
+    total_alumnos = Alumno.objects.count()
+    total_profesores = Profesor.objects.count()
+    total_horarios = Horario.objects.count()
+
+    context = {
+        "total_alumnos": total_alumnos,
+        "total_profesores": total_profesores,
+        "total_horarios": total_horarios,
+    }
+
+    return render(request, "horarios/admin_dashboard.html", context)
 
 
 def profesor_dashboard(request):
@@ -49,14 +59,28 @@ def profesor_dashboard(request):
 def alumno_dashboard(request):
     return render(request, "horarios/alumno_dashboard.html")
 
-
 def lista_horarios(request):
 
     horarios = Horario.objects.all()
 
-    return render(request, "horarios/lista_horarios.html", {
+    profesor = request.GET.get("profesor")
+    grupo = request.GET.get("grupo")
+    dia = request.GET.get("dia")
+
+    if profesor:
+        horarios = horarios.filter(profesor__nombre__icontains=profesor)
+
+    if grupo:
+        horarios = horarios.filter(grupo__nombre__icontains=grupo)
+
+    if dia:
+        horarios = horarios.filter(dia=dia)
+
+    context = {
         "horarios": horarios
-    })
+    }
+
+    return render(request, "horarios/lista_horarios.html", context)
 
 
 def calendario(request):

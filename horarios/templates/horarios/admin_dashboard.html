@@ -2,8 +2,49 @@
 
 {% block content %}
 
-<h2 class="text-success">Panel Administrador</h2>
+<h2 class="text-success mb-4">Panel Administrador</h2>
 
-<a href="/horarios/" class="btn btn-primary">Ver Horarios</a>
+<div class="row">
+
+    <div class="col-md-4">
+        <a href="/admin/horarios/alumno/" class="text-decoration-none">
+            <div class="card text-center shadow">
+                <div class="card-body">
+                    <h5 class="card-title">Alumnos</h5>
+                    <h3>{{ total_alumnos }}</h3>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-md-4">
+        <a href="/admin/horarios/profesor/" class="text-decoration-none">
+            <div class="card text-center shadow">
+                <div class="card-body">
+                    <h5 class="card-title">Profesores</h5>
+                    <h3>{{ total_profesores }}</h3>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-md-4">
+        <a href="/admin/horarios/horario/" class="text-decoration-none">
+            <div class="card text-center shadow">
+                <div class="card-body">
+                    <h5 class="card-title">Clases</h5>
+                    <h3>{{ total_horarios }}</h3>
+                </div>
+            </div>
+        </a>
+    </div>
+
+</div>
+
+<br>
+
+<a href="/admin/" class="btn btn-success btn-lg">
+    Panel completo de Django
+</a>
 
 {% endblock %}
