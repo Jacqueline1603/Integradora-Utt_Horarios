@@ -1,0 +1,28 @@
+{% extends "horarios/base.html" %}
+
+{% block content %}
+
+<h3>Cambiar Aula</h3>
+
+<form method="POST">
+{% csrf_token %}
+
+<label>Aula</label>
+
+<select name="aula" class="form-control">
+
+{% for aula in aulas %}
+<option value="{{ aula.id }}">{{ aula.nombre }}</option>
+{% endfor %}
+
+</select>
+
+<br>
+
+<button class="btn btn-success">
+Guardar
+</button>
+
+</form>
+
+{% endblock %}

@@ -1,0 +1,67 @@
+{% extends "horarios/base.html" %}
+
+{% block contenido %}
+
+<h2 class="mb-4">Calendario de Horarios</h2>
+
+<table class="table table-bordered">
+
+<thead class="table-dark">
+<tr>
+<th>Hora</th>
+<th>Lunes</th>
+<th>Martes</th>
+<th>Miercoles</th>
+<th>Jueves</th>
+<th>Viernes</th>
+</tr>
+</thead>
+
+<tbody>
+
+{% for horario in horarios %}
+
+<tr>
+
+<td>{{ horario.hora_inicio }}</td>
+
+<td>
+{% if horario.dia == "Lunes" %}
+{{ horario.materia.nombre }} <br>
+<small>{{ horario.grupo.nombre }}</small>
+{% endif %}
+</td>
+
+<td>
+{% if horario.dia == "Martes" %}
+{{ horario.materia.nombre }}
+{% endif %}
+</td>
+
+<td>
+{% if horario.dia == "Miercoles" %}
+{{ horario.materia.nombre }}
+{% endif %}
+</td>
+
+<td>
+{% if horario.dia == "Jueves" %}
+{{ horario.materia.nombre }}
+{% endif %}
+</td>
+
+<td>
+{% if horario.dia == "Viernes" %}
+{{ horario.materia.nombre }}
+{% endif %}
+</td>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+{% endblock %}

@@ -1,0 +1,59 @@
+{% extends "horarios/base.html" %}
+
+{% block content %}
+
+<h2 class="mb-4">Horario Semanal</h2>
+
+<table class="table table-bordered text-center">
+
+<thead class="table-dark">
+<tr>
+
+<th>Hora</th>
+
+{% for dia in dias %}
+<th>{{ dia }}</th>
+{% endfor %}
+
+</tr>
+</thead>
+
+<tbody>
+
+{% for hora, fila in tabla.items %}
+
+<tr>
+
+<td class="table-secondary">
+{{ hora }}
+</td>
+
+{% for dia in dias %}
+
+<td>
+
+{% for clase in fila.values %}
+
+{% if clase.dia == dia %}
+
+<strong>{{ clase.materia.nombre }}</strong><br>
+{{ clase.profesor }}<br>
+Aula {{ clase.aula.nombre }}
+
+{% endif %}
+
+{% endfor %}
+
+</td>
+
+{% endfor %}
+
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+{% endblock %}

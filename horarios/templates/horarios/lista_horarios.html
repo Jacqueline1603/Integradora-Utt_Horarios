@@ -1,0 +1,96 @@
+{% extends "horarios/base.html" %}
+
+{% block contenido %}
+
+<h2 class="mb-4">Horarios Académicos</h2>
+
+<<form method="GET" class="mb-4">
+
+<div class="row">
+
+<div class="col-md-3">
+<input
+type="text"
+name="profesor"
+class="form-control"
+placeholder="Profesor">
+</div>
+
+<div class="col-md-3">
+<input
+type="text"
+name="grupo"
+class="form-control"
+placeholder="Grupo">
+</div>
+
+<div class="col-md-3">
+
+<select name="dia" class="form-control">
+
+<option value="">Día</option>
+<option>Lunes</option>
+<option>Martes</option>
+<option>Miercoles</option>
+<option>Jueves</option>
+<option>Viernes</option>
+
+</select>
+
+</div>
+
+<div class="col-md-3">
+
+<button class="btn btn-primary w-100">
+Buscar
+</button>
+
+</div>
+
+</div>
+
+</form>
+
+<table class="table table-bordered table-striped">
+
+<thead class="table-dark">
+<tr>
+<th>Materia</th>
+<th>Profesor</th>
+<th>Grupo</th>
+<th>Aula</th>
+<th>Día</th>
+<th>Inicio</th>
+<th>Fin</th>
+</tr>
+</thead>
+
+<tbody>
+
+{% for horario in horarios %}
+
+<tr>
+<td>{{ horario.materia.nombre }}</td>
+<td>{{ horario.profesor }}</td>
+<td>{{ horario.grupo.nombre }}</td>
+<td>{{ horario.aula.nombre }}</td>
+<td>{{ horario.dia }}</td>
+<td>{{ horario.hora_inicio }}</td>
+<td>{{ horario.hora_fin }}</td>
+</tr>
+
+{% empty %}
+
+<tr>
+<td colspan="7" class="text-center">
+No hay horarios registrados
+</td>
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+{% endblock %}

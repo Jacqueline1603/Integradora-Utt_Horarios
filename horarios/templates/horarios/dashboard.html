@@ -1,0 +1,75 @@
+{% extends "horarios/base.html" %}
+
+{% block content %}
+
+<div class="text-center">
+
+<h2 class="mb-4">Bienvenido al Sistema de Horarios</h2>
+
+<div class="row">
+
+<div class="col-md-4">
+
+<div class="card shadow">
+
+<div class="card-body">
+
+<h5>Horarios</h5>
+
+<p>Ver todos los horarios registrados</p>
+
+<a href="/horarios/" class="btn btn-primary">
+Ver horarios
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-md-4">
+
+<div class="card shadow">
+
+<div class="card-body">
+
+<h5>Calendario</h5>
+
+<p>Visualizar horario semanal</p>
+
+<a href="/calendario/" class="btn btn-warning">
+Ver calendario
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-md-4">
+
+<div class="card shadow">
+
+<div class="card-body">
+
+<h5>Administración</h5>
+
+<p>Administrar datos del sistema</p>
+
+<a href="/admin/" class="btn btn-success">
+Panel Admin
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+{% endblock %}
