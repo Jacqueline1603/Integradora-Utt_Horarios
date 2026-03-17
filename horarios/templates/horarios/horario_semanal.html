@@ -37,8 +37,20 @@
 {% if clase.dia == dia %}
 
 <strong>{{ clase.materia.nombre }}</strong><br>
+
+<span class="badge bg-info">
+    {{ clase.grupo.nombre }}
+</span><br>
+
+<span class="text-primary">
+    {{ clase.grupo.carrera.nombre }} - {{ clase.grupo.cuatrimestre }}° Cuatrimestre
+</span><br>
+
 {{ clase.profesor }}<br>
-Aula {{ clase.aula.nombre }}
+
+<span class="text-muted">
+    Aula {{ clase.aula.nombre }}
+</span>
 
 {% endif %}
 
