@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
-from .models import Horario, Alumno, Profesor, Aula
+from .models import Horario, Alumno, Profesor, Aula, Materia, Grupo
 
 
 def login_view(request):
@@ -38,15 +38,11 @@ def logout_view(request):
     return redirect("login")
 
 def admin_dashboard(request):
-
-    total_alumnos = Alumno.objects.count()
-    total_profesores = Profesor.objects.count()
-    total_horarios = Horario.objects.count()
-
     context = {
-        "total_alumnos": total_alumnos,
-        "total_profesores": total_profesores,
-        "total_horarios": total_horarios,
+        "total_alumnos": Alumno.objects.count(),
+        "total_profesores": Profesor.objects.count(),
+        "total_materias": Materia.objects.count(),
+        "total_grupos": Grupo.objects.count(),
     }
 
     return render(request, "horarios/admin_dashboard.html", context)
