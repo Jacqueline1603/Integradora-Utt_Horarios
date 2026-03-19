@@ -4,9 +4,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-(d#2%54@awvmyt94**rvgh22r8(xak40*(+(#s^^r(&)u8rey*'
 
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 # ===============================
 # APPS
@@ -71,9 +71,9 @@ WSGI_APPLICATION = 'utt_horarios.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'utt_horarios',
-        'USER': 'inventario_admin',
-        'PASSWORD': '123456',
+        'NAME': 'Horarios',
+        'USER': 'postgres',
+        'PASSWORD': '192516',
         'HOST': 'localhost',
         'PORT': '5432',
     }
@@ -117,7 +117,10 @@ STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
     BASE_DIR / "static",
+
 ]
+
+STATIC_ROOT = BASE_DIR / "staticfiles"
 # ===============================
 # USER PERSONALIZADO
 # ===============================
@@ -129,6 +132,5 @@ AUTH_USER_MODEL = 'horarios.Usuario'
 # ===============================
 
 LOGIN_URL = '/'
-
-LOGIN_REDIRECT_URL = '/horario/'
+LOGIN_REDIRECT_URL = '/admin-dashboard/'
 LOGOUT_REDIRECT_URL = '/'

@@ -4,12 +4,20 @@
 
 <h2 class="text-success mb-4">Panel Administrador</h2>
 
+<h1>Panel Administrador</h1>
+
+<a href="{% url 'lista_horarios' %}">Horarios</a>
+<a href="{% url 'lista_profesores' %}">Profesores</a>
+<a href="{% url 'lista_alumnos' %}">Alumnos</a>
+<a href="{% url 'lista_materias' %}">Materias</a>
+<a href="{% url 'lista_aulas' %}">Aulas</a>
+
 <div class="row">
 
     <div class="col-md-3">
         <div class="card text-center shadow">
             <div class="card-body">
-                <h5 class="card-title">Alumnos</h5>
+                <h5>Alumnos</h5>
                 <h3>{{ total_alumnos }}</h3>
             </div>
         </div>
@@ -18,7 +26,7 @@
     <div class="col-md-3">
         <div class="card text-center shadow">
             <div class="card-body">
-                <h5 class="card-title">Profesores</h5>
+                <h5>Profesores</h5>
                 <h3>{{ total_profesores }}</h3>
             </div>
         </div>
@@ -27,7 +35,7 @@
     <div class="col-md-3">
         <div class="card text-center shadow">
             <div class="card-body">
-                <h5 class="card-title">Materias</h5>
+                <h5>Materias</h5>
                 <h3>{{ total_materias }}</h3>
             </div>
         </div>
@@ -36,7 +44,7 @@
     <div class="col-md-3">
         <div class="card text-center shadow">
             <div class="card-body">
-                <h5 class="card-title">Grupos</h5>
+                <h5>Grupos</h5>
                 <h3>{{ total_grupos }}</h3>
             </div>
         </div>
@@ -46,8 +54,247 @@
 
 <br>
 
-<a href="/admin/" class="btn btn-success btn-lg">
-    Configuración
-</a>
+<div class="row">
+
+    <!-- 🔹 PROFESORES -->
+    <div class="col-md-6">
+        <h4>Profesores</h4>
+
+        <form method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="tipo" value="profesor">
+
+            <input type="text" name="nombre" class="form-control mb-2" placeholder="Nuevo profesor">
+            <button class="btn btn-success btn-sm">Agregar</button>
+        </form>
+
+        <table class="table mt-2">
+            {% for p in profesores %}
+            <tr>
+                <td>
+                    <form method="POST" class="d-flex">
+                        {% csrf_token %}
+                        <input type="hidden" name="tipo" value="editar_profesor">
+                        <input type="hidden" name="id" value="{{ p.id }}">
+
+                        <!-- 🔥 CORREGIDO -->
+                        <input type="text" name="nombre" value="{{ p.nombre }}" class="form-control me-2">
+                        <button class="btn btn-warning btn-sm">✏️</button>
+                    </form>
+                </td>
+                <td>
+                    <form method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="tipo" value="eliminar_profesor">
+                        <input type="hidden" name="id" value="{{ p.id }}">
+                        <button class="btn btn-danger btn-sm">🗑️</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <!-- 🔹 ALUMNOS -->
+    <div class="col-md-6">
+        <h4>Alumnos</h4>
+
+        <form method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="tipo" value="alumno">
+
+            <input type="text" name="nombre" class="form-control mb-1" placeholder="Nombre">
+            <input type="text" name="matricula" class="form-control mb-1" placeholder="Matrícula">
+
+            <select name="grupo" class="form-control mb-2">
+                {% for g in grupos %}
+                <option value="{{ g.id }}">{{ g.nombre }}</option>
+                {% endfor %}
+            </select>
+
+            <button class="btn btn-success btn-sm">Agregar</button>
+        </form>
+    </div>
+
+    <!-- 🔹 MATERIAS -->
+    <div class="col-md-6">
+        <h4>Materias</h4>
+
+        <form method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="tipo" value="materia">
+
+            <input type="text" name="nombre" class="form-control mb-2" placeholder="Nueva materia">
+            <button class="btn btn-success btn-sm">Agregar</button>
+        </form>
+
+        <table class="table mt-2">
+            {% for m in materias %}
+            <tr>
+                <td>
+                    <form method="POST" class="d-flex">
+                        {% csrf_token %}
+                        <input type="hidden" name="tipo" value="editar_materia">
+                        <input type="hidden" name="id" value="{{ m.id }}">
+
+                        <input type="text" name="nombre" value="{{ m.nombre }}" class="form-control me-2">
+                        <button class="btn btn-warning btn-sm">✏️</button>
+                    </form>
+                </td>
+                <td>
+                    <form method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="tipo" value="eliminar_materia">
+                        <input type="hidden" name="id" value="{{ m.id }}">
+                        <button class="btn btn-danger btn-sm">🗑️</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+</div>
+
+<br>
+
+<div class="row">
+
+    <!-- 🔹 GRUPOS -->
+    <div class="col-md-6">
+        <h4>Grupos</h4>
+
+        <form method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="tipo" value="grupo">
+
+            <input type="text" name="nombre" class="form-control mb-1" placeholder="Grupo">
+            <input type="text" name="cuatrimestre" class="form-control mb-1" placeholder="Cuatrimestre">
+
+            <select name="carrera" class="form-control mb-2">
+                <option value="">Seleccione carrera</option>
+                {% for c in carreras %}
+                <option value="{{ c.id }}">{{ c.nombre }}</option>
+                {% endfor %}
+            </select>
+
+            <button class="btn btn-success btn-sm">Agregar</button>
+        </form>
+
+        <table class="table mt-2">
+            {% for g in grupos %}
+            <tr>
+                <td>
+                    <form method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="tipo" value="editar_grupo">
+                        <input type="hidden" name="id" value="{{ g.id }}">
+
+                        <input type="text" name="nombre" value="{{ g.nombre }}">
+                        <input type="text" name="cuatrimestre" value="{{ g.cuatrimestre }}">
+
+                        <!-- 🔥 CORREGIDO -->
+                        <select name="carrera">
+                            {% for c in carreras %}
+                            <option value="{{ c.id }}" {% if g.carrera.id == c.id %}selected{% endif %}>
+                                {{ c.nombre }}
+                            </option>
+                            {% endfor %}
+                        </select>
+
+                        <button class="btn btn-warning btn-sm">✏️</button>
+                    </form>
+                </td>
+                <td>
+                    <form method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="tipo" value="eliminar_grupo">
+                        <input type="hidden" name="id" value="{{ g.id }}">
+                        <button class="btn btn-danger btn-sm">🗑️</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <!-- 🔹 AULAS -->
+    <div class="col-md-6">
+        <h4>Aulas</h4>
+
+        <form method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="tipo" value="aula">
+
+            <input type="text" name="nombre" class="form-control mb-2" placeholder="Nueva aula">
+            <button class="btn btn-success btn-sm">Agregar</button>
+        </form>
+
+        <table class="table mt-2">
+            {% for a in aulas %}
+            <tr>
+                <td>
+                    <form method="POST" class="d-flex">
+                        {% csrf_token %}
+                        <input type="hidden" name="tipo" value="editar_aula">
+                        <input type="hidden" name="id" value="{{ a.id }}">
+
+                        <input type="text" name="nombre" value="{{ a.nombre }}" class="form-control me-2">
+                        <button class="btn btn-warning btn-sm">✏️</button>
+                    </form>
+                </td>
+                <td>
+                    <form method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="tipo" value="eliminar_aula">
+                        <input type="hidden" name="id" value="{{ a.id }}">
+                        <button class="btn btn-danger btn-sm">🗑️</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+</div>
+
+<br>
+
+<h4>Horarios</h4>
+
+<form method="POST">
+    {% csrf_token %}
+    <input type="hidden" name="tipo" value="horario">
+
+    <select name="materia" class="form-control mb-1">
+        {% for m in materias %}
+        <option value="{{ m.id }}">{{ m.nombre }}</option>
+        {% endfor %}
+    </select>
+
+    <select name="profesor" class="form-control mb-1">
+        {% for p in profesores %}
+        <option value="{{ p.id }}">{{ p.nombre }}</option>
+        {% endfor %}
+    </select>
+
+    <select name="grupo" class="form-control mb-1">
+        {% for g in grupos %}
+        <option value="{{ g.id }}">{{ g.nombre }}</option>
+        {% endfor %}
+    </select>
+
+    <select name="aula" class="form-control mb-1">
+        {% for a in aulas %}
+        <option value="{{ a.id }}">{{ a.nombre }}</option>
+        {% endfor %}
+    </select>
+
+    <input type="text" name="dia" class="form-control mb-1" placeholder="Día">
+    <input type="time" name="inicio" class="form-control mb-1">
+    <input type="time" name="fin" class="form-control mb-2">
+
+    <button class="btn btn-success">Agregar horario</button>
+</form>
 
 {% endblock %}

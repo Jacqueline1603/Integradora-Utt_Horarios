@@ -4,6 +4,26 @@
 
 <h2 class="mb-4">Horarios Académicos</h2>
 
+<h2>Horarios</h2>
+<a href="{% url 'crear_horario' %}">Agregar</a>
+
+<table>
+<tr>
+<th>Materia</th><th>Profesor</th><th>Acciones</th>
+</tr>
+
+{% for h in horarios %}
+<tr>
+<td>{{h.materia}}</td>
+<td>{{h.profesor}}</td>
+<td>
+<a href="{% url 'editar_horario' h.id %}">Editar</a>
+<a href="{% url 'eliminar_horario' h.id %}">Eliminar</a>
+</td>
+</tr>
+{% endfor %}
+</table>
+
 <form method="GET" class="mb-4">
 
 <div class="row">

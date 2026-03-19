@@ -1,30 +1,26 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
-from .models import Horario, Alumno, Profesor, Aula, Materia, Grupo
-
+from django.contrib.auth.decorators import login_required
+from .models import Horario, Alumno, Profesor, Aula, Materia, Grupo, Carrera, Usuario
+# from django.contrib.auth.models import User 
 
 def login_view(request):
 
     if request.method == "POST":
-
         username = request.POST.get("username")
         password = request.POST.get("password")
 
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
-
             login(request, user)
 
             if user.role == "administrador":
                 return redirect("admin_dashboard")
-
             elif user.role == "profesor":
                 return redirect("horario_profesor")
-
             elif user.role == "alumno":
                 return redirect("horario_alumno")
-
         else:
             return render(request, "horarios/login.html", {
                 "error": "Usuario o contraseña incorrectos"
@@ -37,12 +33,96 @@ def logout_view(request):
     logout(request)
     return redirect("login")
 
+@login_required
 def admin_dashboard(request):
+
+    if request.method == "POST":
+
+        tipo = request.POST.get("tipo")
+
+        # 🔹 PROFESOR
+        if tipo == "profesor":
+            nombre = request.POST.get("nombre")
+            Profesor.objects.create(nombre=nombre)
+
+        elif tipo == "editar_profesor":
+            id = request.POST.get("id")
+            nombre = request.POST.get("nombre")
+            p = Profesor.objects.get(id=id)
+            p.nombre = nombre
+            p.save()
+
+        elif tipo == "eliminar_profesor":
+            id = request.POST.get("id")
+            Profesor.objects.get(id=id).delete()
+
+        # 🔹 MATERIA
+        elif tipo == "materia":
+            nombre = request.POST.get("nombre")
+            Materia.objects.create(nombre=nombre)
+
+        elif tipo == "editar_materia":
+            id = request.POST.get("id")
+            nombre = request.POST.get("nombre")
+            m = Materia.objects.get(id=id)
+            m.nombre = nombre
+            m.save()
+
+        elif tipo == "eliminar_materia":
+            id = request.POST.get("id")
+            Materia.objects.get(id=id).delete()
+
+        # 🔹 GRUPO
+        elif tipo == "grupo":
+            print (request.POST)
+            #id = request.POST.get("id")
+            nombre = request.POST.get("nombre")
+            cuatrimestre = request.POST.get("cuatrimestre")
+            carrera_id = request.POST.get("carrera")
+
+            g = Grupo() #.objects.get(id=id)
+            g.nombre = nombre
+            g.cuatrimestre = cuatrimestre
+            g.carrera = Carrera.objects.get(id=carrera_id)
+            g.save()
+            
+        # 🔹 AULA
+        elif tipo == "aula":
+            nombre = request.POST.get("nombre")
+            Aula.objects.create(nombre=nombre)
+
+        # 🔹 ALUMNO
+        elif tipo == "alumno":
+            print (request.POST)
+            nombre = request.POST.get("nombre")
+            matricula = request.POST.get("matricula")
+            grupo = Grupo.objects.get(id=request.POST.get("grupo"))
+
+            user = Usuario.objects.create_user(
+                username=matricula,
+                email= nombre + '@correo.com',
+                password= matricula,
+                role='alumno'
+            )
+
+            Alumno.objects.create(
+                usuario = user, 
+                nombre=nombre,
+                matricula=matricula,
+                grupo=grupo
+    )
+
+    # 🔹 DATOS PARA MOSTRAR
     context = {
-        "total_alumnos": Alumno.objects.count(),
+        "profesores": Profesor.objects.all(),
+        "materias": Materia.objects.all(),
+        "grupos": Grupo.objects.all(),
+        "aulas": Aula.objects.all(),
+        "carreras": Carrera.objects.all(),
         "total_profesores": Profesor.objects.count(),
         "total_materias": Materia.objects.count(),
         "total_grupos": Grupo.objects.count(),
+        "total_alumnos": Alumno.objects.count(),
     }
 
     return render(request, "horarios/admin_dashboard.html", context)
@@ -55,6 +135,7 @@ def profesor_dashboard(request):
 def alumno_dashboard(request):
     return render(request, "horarios/alumno_dashboard.html")
 
+
 def lista_horarios(request):
 
     horarios = Horario.objects.all()
@@ -64,7 +145,7 @@ def lista_horarios(request):
     dia = request.GET.get("dia")
 
     if profesor:
-        horarios = horarios.filter(profesor__nombre__icontains=profesor)
+        horarios = horarios.filter(profesor__usuario__first_name__icontains=profesor)
 
     if grupo:
         horarios = horarios.filter(grupo__nombre__icontains=grupo)
@@ -72,16 +153,31 @@ def lista_horarios(request):
     if dia:
         horarios = horarios.filter(dia=dia)
 
-    context = {
+    return render(request, "horarios/lista_horarios.html", {
         "horarios": horarios
-    }
-
-    return render(request, "horarios/lista_horarios.html", context)
-
+    })
 
 def calendario(request):
     return render(request, "horarios/calendario.html")
 
+def editar_aula(request, id):
+
+    horario = get_object_or_404(Horario, id=id)
+    aulas = Aula.objects.all()
+
+    if request.method == "POST":
+        aula_id = request.POST.get("aula")
+        aula = Aula.objects.get(id=aula_id)
+
+        horario.aula = aula
+        horario.save()
+
+        return redirect("horario_profesor")  # o la vista que uses
+
+    return render(request, "horarios/editar_aula.html", {
+        "horario": horario,
+        "aulas": aulas
+    })
 
 def horario_alumno(request):
 
@@ -109,7 +205,6 @@ def horario_alumno(request):
         "dias": dias
     })
 
-
 def horario_profesor(request):
 
     profesor = Profesor.objects.get(usuario=request.user)
@@ -136,23 +231,14 @@ def horario_profesor(request):
         "dias": dias
     })
 
-def editar_aula(request, horario_id):
+def lista_profesores(request):
+    return render(request, 'horarios/lista_profesores.html')
 
-    horario = get_object_or_404(Horario, id=horario_id)
+def lista_alumnos(request):
+    return render(request, 'horarios/lista_alumnos.html')
 
-    aulas = Aula.objects.all()
+def lista_materias(request):
+    return render(request, 'horarios/lista_materias.html')
 
-    if request.method == "POST":
-
-        aula_id = request.POST.get("aula")
-        aula = Aula.objects.get(id=aula_id)
-
-        horario.aula = aula
-        horario.save()
-
-        return redirect("horario_semanal")
-
-    return render(request, "horarios/editar_aula.html", {
-        "horario": horario,
-        "aulas": aulas
-    })
+def lista_aulas(request):
+    return render(request, 'horarios/lista_aulas.html')
