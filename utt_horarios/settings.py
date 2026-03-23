@@ -1,4 +1,5 @@
 from pathlib import Path
+import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -113,14 +114,12 @@ USE_TZ = True
 # STATIC FILES (MUY IMPORTANTE)
 # ===============================
 
-STATIC_URL = '/static/'
+STATIC_URL = 'static/'
 
-STATICFILES_DIRS = [
-    BASE_DIR / "static",
-
-]
-
-STATIC_ROOT = BASE_DIR / "staticfiles"
+if DEBUG:
+    STATICFILES_DIRS = [BASE_DIR / 'static']
+else:
+    STATIC_ROOT = BASE_DIR / "static"
 # ===============================
 # USER PERSONALIZADO
 # ===============================

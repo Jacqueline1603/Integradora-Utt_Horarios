@@ -35,6 +35,10 @@ def logout_view(request):
 
 @login_required
 def admin_dashboard(request):
+    if request.user.role == "profesor":
+        return redirect("profesor_dashboard")
+    elif request.user.role == "alumno":
+        return redirect("alumno_dashboard")
 
     if request.method == "POST":
 
@@ -43,7 +47,13 @@ def admin_dashboard(request):
         # 🔹 PROFESOR
         if tipo == "profesor":
             nombre = request.POST.get("nombre")
-            Profesor.objects.create(nombre=nombre)
+            user = Usuario.objects.create_user(
+                username=nombre,
+                email= nombre + '@correo.com',
+                password= nombre,
+                role='profesor'
+            )
+            Profesor.objects.create(nombre=nombre, usuario=user)
 
         elif tipo == "editar_profesor":
             id = request.POST.get("id")
@@ -110,8 +120,20 @@ def admin_dashboard(request):
                 nombre=nombre,
                 matricula=matricula,
                 grupo=grupo
-    )
+             )
+        elif tipo == "horario":
+            print(request.POST)
+            profesor = Profesor.objects.get(id=request.POST.get("profesor"))
 
+            materia = Materia.objects.get(id=request.POST.get("materia"))
+            grupo = Grupo.objects.get(id=request.POST.get("grupo"))
+            aula = Aula.objects.get(id=request.POST.get("aula"))
+            dia = request.POST.get("dia")
+            hora_inicio = request.POST.get("inicio")
+            hora_fin =request.POST.get("fin") 
+            print(hora_fin, hora_inicio)
+            horario = Horario(profesor=profesor, materia=materia, grupo=grupo, aula=aula, dia=dia, hora_inicio=hora_inicio, hora_fin=hora_fin)
+            horario.save()
     # 🔹 DATOS PARA MOSTRAR
     context = {
         "profesores": Profesor.objects.all(),
