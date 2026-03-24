@@ -1,0 +1,21 @@
+<h2>Mi horario</h2>
+
+<table border="1">
+    <tr>
+        <th>Materia</th>
+        <th>Grupo</th>
+        <th>Aula</th>
+        <th>Día</th>
+        <th>Hora</th>
+    </tr>
+
+    {% for h in horarios %}
+    <tr>
+        <td>{{ h.materia.nombre }}</td>
+        <td>{{ h.grupo.nombre }}</td>
+        <td>{{ h.aula.nombre }}</td>
+        <td>{{ h.dia }}</td>
+        <td>{{ h.hora_inicio }} - {{ h.hora_fin }}</td>
+    </tr>
+    {% endfor %}
+</table>
