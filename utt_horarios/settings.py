@@ -1,13 +1,13 @@
 from pathlib import Path
 import os
-import dj_database_url
+import dj_database_url 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-(d#2%54@awvmyt94**rvgh22r8(xak40*(+(#s^^r(&)u8rey*'
 
 DEBUG = False
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'https://integradora-utt-horarios.onrender.com']
+ALLOWED_HOSTS = ['*']
 
 # ===============================
 # APPS
