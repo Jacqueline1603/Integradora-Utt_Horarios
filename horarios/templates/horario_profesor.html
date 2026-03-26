@@ -1,21 +1,38 @@
-<h2>Mi horario</h2>
+{% extends 'horarios/base.html' %}
 
-<table border="1">
-    <tr>
-        <th>Materia</th>
-        <th>Grupo</th>
-        <th>Aula</th>
-        <th>Día</th>
-        <th>Hora</th>
-    </tr>
+{% block content %}
 
-    {% for h in horarios %}
-    <tr>
-        <td>{{ h.materia.nombre }}</td>
-        <td>{{ h.grupo.nombre }}</td>
-        <td>{{ h.aula.nombre }}</td>
-        <td>{{ h.dia }}</td>
-        <td>{{ h.hora_inicio }} - {{ h.hora_fin }}</td>
-    </tr>
-    {% endfor %}
-</table>
+<h2 class="text-center mb-4" style="color:#2c3e50;">
+    Mi Horario
+</h2>
+
+<div class="table-responsive">
+    <table class="table table-bordered text-center shadow">
+        <thead style="background-color:#1abc9c; color:white;">
+            <tr>
+                <th>Materia</th>
+                <th>Grupo</th>
+                <th>Aula</th>
+                <th>Día</th>
+                <th>Hora</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for h in horarios %}
+            <tr style="background-color:#ecf0f1;">
+                <td>{{ h.materia.nombre }}</td>
+                <td>{{ h.grupo.nombre }}</td>
+                <td>{{ h.aula.nombre }}</td>
+                <td>{{ h.dia }}</td>
+                <td>{{ h.hora_inicio }} - {{ h.hora_fin }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5">No tienes horarios asignados</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

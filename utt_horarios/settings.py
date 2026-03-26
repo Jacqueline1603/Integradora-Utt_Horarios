@@ -5,7 +5,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-(d#2%54@awvmyt94**rvgh22r8(xak40*(+(#s^^r(&)u8rey*'
 
-DEBUG = True
+DEBUG = False
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 # ===============================
@@ -132,3 +132,4 @@ AUTH_USER_MODEL = 'horarios.Usuario'
 LOGIN_URL = '/'
 LOGIN_REDIRECT_URL = '/admin-dashboard/'
 LOGOUT_REDIRECT_URL = '/'
+
