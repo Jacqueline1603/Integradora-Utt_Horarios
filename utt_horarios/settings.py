@@ -1,5 +1,6 @@
 from pathlib import Path
 import os
+import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -69,14 +70,18 @@ WSGI_APPLICATION = 'utt_horarios.wsgi.application'
 # ===============================
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'Horarios',
-        'USER': 'postgres',
-        'PASSWORD': '192516',
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
+    'default': dj_database_url.config(
+        default=os.getenv('DATABASE_URL'),
+        conn_max_age=600
+        )
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.postgresql',
+    #     'NAME': 'Horarios',
+    #     'USER': 'postgres',
+    #     'PASSWORD': '192516',
+    #     'HOST': 'localhost',
+    #     'PORT': '5432',
+    # }
 }
 
 # ===============================
